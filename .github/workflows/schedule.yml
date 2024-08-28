@@ -1,0 +1,37 @@
+name: Daily
+
+on:
+  workflow_dispatch:
+
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  run-ranker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          git fetch --all
+          git checkout main
+          git pull
+
+      - uses: oven-sh/setup-bun@v2
+      - run: |
+          bun i -p
+          bun run start
+
+      - run: |
+          echo "RESULT_DIR=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+
+      - uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.ACTIONS_DEPLOY_TOKEN }}
+          publish_dir: ${{ env.RESULT_DIR }}
+          destination_dir: ${{ env.RESULT_DIR }}
+          user_name: "github-actions[bot]"
+          user_email: "github-actions[bot]@users.noreply.github.com"
+          enable_jekyll: true
+          keep_files: true
+          publish_branch: result

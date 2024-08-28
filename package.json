@@ -1,0 +1,21 @@
+{
+  "name": "gp-ranker",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "start": "bun run index.ts",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "prettier": "^3.3.3"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "google-play-scraper": "^10.0.0",
+    "iso-3166-1": "^2.1.1",
+    "p-limit": "^6.1.0"
+  }
+}
