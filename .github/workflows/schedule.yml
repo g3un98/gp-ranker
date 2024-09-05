@@ -17,8 +17,12 @@ jobs:
           git checkout main
           git pull
 
-          git checkout result -- merged_global.json || true
-          git checkout result -- merged_kr.json || true
+          if git ls-tree origin/result --name-only | grep -q "merged_global.json"; then
+            git checkout origin/result -- merged_global.json;
+          fi
+          if git ls-tree origin/result --name-only | grep -q "merged_kr.json"; then
+            git checkout origin/result -- merged_kr.json;
+          fi
 
       - uses: oven-sh/setup-bun@v2
       - run: |
