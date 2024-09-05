@@ -89,7 +89,7 @@ function sortResult(result: Result): Result {
 
 async function main() {
   const date = new Date().toISOString().split("T")[0];
-  const folderPath = path.join(__dirname, date);
+  const folderPath = path.join(process.cwd(), date);
   await fs.mkdir(folderPath, { recursive: true });
 
   const countries = iso3166.all().map((country) => country.alpha2);
