@@ -17,19 +17,25 @@ jobs:
           git checkout main
           git pull
 
+          git checkout result -- merged_global.json
+          git checkout result -- merged_kr.json
+
       - uses: oven-sh/setup-bun@v2
       - run: |
           bun i -p
           bun run start
+          bun run merge
 
       - run: |
-          echo "RESULT_DIR=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+          mkdir tmp
+          mv $(date +'%Y-%m-%d') tmp/
+          mv merged_global.json tmp/
+          mv merged_kr.json tmp/
 
       - uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.ACTIONS_DEPLOY_TOKEN }}
-          publish_dir: ${{ env.RESULT_DIR }}
-          destination_dir: ${{ env.RESULT_DIR }}
+          publish_dir: tmp
           user_name: "github-actions[bot]"
           user_email: "github-actions[bot]@users.noreply.github.com"
           enable_jekyll: true
