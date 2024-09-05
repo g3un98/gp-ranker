@@ -1,10 +1,7 @@
-name: Daily
+name: Merge
 
 on:
   workflow_dispatch:
-
-  schedule:
-    - cron: "0 0 * * *"
 
 jobs:
   run-ranker:
@@ -14,21 +11,21 @@ jobs:
       - uses: actions/checkout@v4
       - run: |
           git fetch --all
-          git checkout main
+          git checkout result
           git pull
 
-          git checkout result -- merged_global.json || true
-          git checkout result -- merged_kr.json || true
+          git checkout main -- package.json || true
+          git checkout main -- tsconfig.json || true
+          git checkout main -- bun.lockb || true
+          git checkout main -- src || true
 
       - uses: oven-sh/setup-bun@v2
       - run: |
           bun i -p
-          bun run start
           bun run merge
 
       - run: |
           mkdir tmp
-          mv $(date +'%Y-%m-%d') tmp/
           mv merged_global.json tmp/
           mv merged_kr.json tmp/
 
